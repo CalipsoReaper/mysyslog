@@ -8,7 +8,8 @@
 
 static volatile int keepRunning = 1;
 
-void intHandler(int dummy) {
+// Удаляем неиспользуемый параметр
+void intHandler() {
     keepRunning = 0;
 }
 
