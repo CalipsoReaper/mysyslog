@@ -26,7 +26,3 @@
 - make all – собирает все цели;
 - make clean – удаляет все временные и объекты файлы, создаваемые при компиляции, исходные тексты должны приводится к изначальному виду;
 - make deb – собирает deb-пакет для программы.
-
-## Использование
-- **mysyslog client**: запуск клиентского приложения: ./mysyslog-client -m "test message" -l INFO -d text -f /var/log/mysyslog.log
-- **mysyslog daemon**: настройка конфигурации в '/etc/mysyslog/mysyslog.cfg' и запуск демона: sudo systemctl start mysyslog-daemon
