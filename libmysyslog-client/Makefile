@@ -6,12 +6,12 @@ TARGET = libmysyslog-client
 all: $(TARGET)
 
 $(TARGET): libmysyslog-client.o
-        $(CC) -o $(TARGET) libmysyslog-client.o $(LDFLAGS)
+ $(CC) -o $(TARGET) libmysyslog-client.o $(LDFLAGS)
 
-libmysyslog.o: libmysyslog-client.c
-        $(cc) $(CFLAGS) -c libmysyslog-client.c
+libmysyslog-client.o: libmysyslog-client.c
+ $(CC) $(CFLAGS) -c libmysyslog-client.c
 
 clean:
-        rm -f $(TARGET) *.o
+ rm -f $(TARGET) *.o
 
 .PHONY: all clean
