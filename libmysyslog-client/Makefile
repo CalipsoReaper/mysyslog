@@ -1,17 +1,35 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -I../libmysyslog
-LDFLAGS = -L../libmysyslog -lmysyslog
-TARGET = libmysyslog-client
+CFLAGS = -Iinclude -I../libmysyslog/include -Wall -Wextra
+
+SRC = src/mysyslog-client.c
+OBJ = $(SRC:.c=.o)
+TARGET = mysyslog-client
+
+PACKAGE_DIR = deb-package
+PACKAGE_NAME = mysyslog-client
+PACKAGE_PATH = $(PACKAGE_NAME).deb
+
+LIBS = -L../libmysyslog -lmysyslog
 
 all: $(TARGET)
 
-$(TARGET): libmysyslog-client.o
-  $(CC) -o $(TARGET) libmysyslog-client.o $(LDFLAGS)
+$(TARGET): $(OBJ)
+	$(CC) -o $@ $^ $(LIBS)
 
-libmysyslog.o: libmysyslog-client.c
-  $(cc) $(CFLAGS) -c libmysyslog-client.c
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-  rm -f $(TARGET) *.o
+	rm -f $(OBJ) $(TARGET)
+	rm -rf $(PACKAGE_DIR)
 
-.PHONY: all clean
+deb: clean $(TARGET)
+	mkdir -p $(PACKAGE_DIR)/usr/bin/
+	mkdir -p $(PACKAGE_DIR)/DEBIAN/
+	echo "Package: $(PACKAGE_NAME)" > $(PACKAGE_DIR)/DEBIAN/control
+	echo "Version: 1.0" >> $(PACKAGE_DIR)/DEBIAN/control
+	echo "Architecture: amd64" >> $(PACKAGE_DIR)/DEBIAN/control
+	echo "Maintainer: Vladislav Babanov" >> $(PACKAGE_DIR)/DEBIAN/control
+	echo "Description: Command-line client for mysyslog" >> $(PACKAGE_DIR)/DEBIAN/control
+	cp $(TARGET) $(PACKAGE_DIR)/usr/bin/
+	dpkg-deb --build $(PACKAGE_DIR) $(PACKAGE_PATH)
